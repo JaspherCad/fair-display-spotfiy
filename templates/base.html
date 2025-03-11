@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Recommendation System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Spotify Recommendation System</h1>
+    </header>
+    <main>
+        {% block content %}
+        <!-- Dynamic content will be injected here -->
+        {% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Spotify Recommender</p>
+    </footer>
+</body>
+</html>

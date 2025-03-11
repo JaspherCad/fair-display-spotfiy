@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Select a Playlist</h2>
+    <p>Logged in as: {{ user_name }}</p>
+
+    <a href="{{ url_for('logout') }}">Logout</a>
+
+    <form action="/recommendations" method="POST">
+        <div class="form-group">
+            <select name="playlist" id="playlist-select" onchange="loadPlaylistTracks(this.value)">
+                <option value="">Select a playlist</option>
+                {% for name, id in playlists.items() %}
+                <option value="{{ id }}">{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="num_recommendations">Number of Recommendations:</label>
+            <input 
+                type="number" 
+                id="num_recommendations" 
+                name="num_recommendations" 
+                min="1" 
+                max="200" 
+                value="20"
+                required
+            >
+            <small>Choose between 1 and 40 songs</small>
+        </div>
+        
+        <!-- <h3>Save Recommendations as a Playlist</h3>
+        <div>
+            <input type="checkbox" id="save_playlist" name="save_playlist">
+            <label for="save_playlist">Save recommendations as a new playlist</label>
+        </div>
+        <div id="playlist_name_div" style="display: none;">
+            <label for="playlist_name">Playlist Name:</label>
+            <input type="text" id="playlist_name" name="playlist_name" placeholder="Enter playlist name">
+        </div> -->
+        
+        <button type="submit">Generate Recommendations</button>
+    </form>
+
+    <!-- Add this div for current playlist -->
+    <div id="current-playlist-container"></div>
+
+    {% if recommendations %}
+    <h3>Top Recommendations</h3>
+    <div class="recommendations-container">
+        <ul class="recommendations-list">
+            {% for track in recommendations %}
+            <li class="track-item {% if loop.index > 50 %}hidden{% endif %}">
+                <a href="#" class="track-link" data-track-name="{{ track['name'] }}">
+                    <img src="{{ track['url'] }}" alt="Track Cover" style="width:50px;height:50px;">
+                    <span>{{ track['name'] }} by {{ track['artist'] }}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        
+        {% if recommendations|length > 50 %}
+        <div class="pagination-controls">
+            <button id="load-more">Load More</button>
+            <button id="show-all">Show All</button>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="playlist-comparison">
+        <h3>Playlist Comparison</h3>
+        <div class="comparison-container">
+            <div class="playlist-box original">
+                <h4>Your Original Playlist</h4>
+                <div class="playlist-tracks">
+                    {% for track in current_playlist %}
+                    <div class="track-item">
+                        <img src="{{ track['url'] }}" alt="Album Cover" class="track-cover">
+                        <div class="track-details">
+                            <span class="track-name">{{ track['name'] }}</span>
+                            <span class="track-artist">{{ track['artist'] }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="comparison-arrow">
+                <span>➜</span>
+            </div>
+
+            <div class="playlist-box recommendations">
+                <h4>Generated Recommendations</h4>
+                <div class="playlist-tracks">
+                    {% for track in recommendations %}
+                    <div class="track-item">
+                        <img src="{{ track['url'] }}" alt="Album Cover" class="track-cover">
+                        <div class="track-details">
+                            <span class="track-name">{{ track['name'] }}</span>
+                            <span class="track-artist">{{ track['artist'] }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="features-summary">
+        <h3>Playlist Features Comparison</h3>
+        <div class="features-comparison-container">
+            <!-- Original Playlist Features -->
+            <div class="features-table-container">
+                <h4>Original Playlist Features</h4>
+                <table class="features-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feature, value in complete_feature_set_playlist_vector_EDM.items() %}
+                        <tr>
+                            <td>{{ feature.replace('|', ' - ') }}</td>
+                            <td>{{ "%.6f"|format(value) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="comparison-arrow">
+                <span>➜</span>
+            </div>
+
+            <!-- Generated Playlist Features -->
+            <div class="features-table-container">
+                <h4>Generated Playlist Features</h4>
+                <table class="features-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feature, value in recommended_complete_feature_set_playlist_vector_EDM.items() %}
+                        <tr>
+                            <td>{{ feature.replace('|', ' - ') }}</td>
+                            <td>{{ "%.6f"|format(value) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="save-playlist-section">
+        <h3>Save Recommendations as a Playlist</h3>
+        <form action="/save_playlist" method="POST">
+            <div>
+                <label for="playlist_name">Playlist Name:</label>
+                <input type="text" id="playlist_name" name="playlist_name" placeholder="Enter playlist name" required>
+            </div>
+            <input type="hidden" name="tracks" value="{{ tracks }}">
+            <button type="submit">Save Playlist</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const savePlaylistCheckbox = document.getElementById('save_playlist');
+        const playlistNameDiv = document.getElementById('playlist_name_div');
+        savePlaylistCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                playlistNameDiv.style.display = 'block';
+            } else {
+                playlistNameDiv.style.display = 'none';
+            }
+        });
+
+        const trackLinks = document.querySelectorAll('.track-link');
+        trackLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const trackName = this.getAttribute('data-track-name');
+                alert('Selected track: ' + trackName);
+            });
+        });
+
+        // Pagination functionality
+        const loadMoreBtn = document.getElementById('load-more');
+        const showAllBtn = document.getElementById('show-all');
+        const trackItems = document.querySelectorAll('.track-item');
+        let currentlyShown = 50;
+
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', function() {
+                // Show next 50 items
+                for (let i = currentlyShown; i < Math.min(currentlyShown + 50, trackItems.length); i++) {
+                    trackItems[i].classList.remove('hidden');
+                }
+                currentlyShown += 50;
+                
+                // Hide load more button if all items are shown
+                if (currentlyShown >= trackItems.length) {
+                    loadMoreBtn.style.display = 'none';
+                }
+            });
+        }
+
+        if (showAllBtn) {
+            showAllBtn.addEventListener('click', function() {
+                // Show all items
+                trackItems.forEach(item => item.classList.remove('hidden'));
+                loadMoreBtn.style.display = 'none';
+                showAllBtn.style.display = 'none';
+            });
+        }
+    });
+
+    function loadPlaylistTracks(playlistId) {
+        if (!playlistId) return;
+        
+        // Show loading state
+        document.getElementById('current-playlist-container').innerHTML = '<p>Loading playlist...</p>';
+        
+        fetch(`/get_playlist_tracks/${playlistId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // Create playlist HTML
+                let playlistHtml = `
+                    <div class="current-playlist-section">
+                        <h3>Current Playlist: ${data.playlist_name}</h3>
+                        <div class="playlist-container">
+                            <ul class="playlist-tracks">
+                                ${data.tracks.map(track => `
+                                    <li class="track-item">
+                                        <div class="track-info">
+                                            <img src="${track.url}" alt="Album Cover" class="track-cover">
+                                            <div class="track-details">
+                                                <span class="track-name">${track.name}</span>
+                                                <span class="track-artist">${track.artist}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('current-playlist-container').innerHTML = playlistHtml;
+            })
+            .catch(error => {
+                document.getElementById('current-playlist-container').innerHTML = 
+                    `<p class="error">Error loading playlist: ${error.message}</p>`;
+            });
+    }
+</script>
+{% endblock %}

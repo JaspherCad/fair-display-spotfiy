@@ -1,0 +1,311 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #121212;
+    color: #ffffff;
+}
+
+header {
+    background-color: #1ED760;
+    color: #121212;
+    padding: 1rem;
+    text-align: center;
+}
+
+h1, h2, h3 {
+    font-weight: normal;
+    color: #ffffff;
+}
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: #1c1c1c;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+}
+
+button, .button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    color: #121212;
+    background-color: #1ED760;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover, .button:hover {
+    background-color: #17a743;
+    color: #121212;
+}
+
+select, input[type="text"] {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #333;
+    color: #ffffff;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #1c1c1c;
+    color: #ffffff;
+    margin-top: 2rem;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 0.5rem 0;
+    color: #ffffff;
+}
+
+a {
+    text-decoration: none;
+    color: #1ED760;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.playlist-comparison {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #282828;
+    border-radius: 8px;
+}
+
+.comparison-container {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.playlist-box {
+    flex: 1;
+    background: #181818;
+    padding: 1rem;
+    border-radius: 8px;
+    min-width: 300px;
+}
+
+.playlist-box h4 {
+    color: #1ED760;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #333;
+}
+
+.playlist-tracks {
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.playlist-tracks .track-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    background: #282828;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.playlist-tracks .track-item:hover {
+    background: #333;
+}
+
+.track-cover {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    margin-right: 1rem;
+}
+
+.track-details {
+    flex: 1;
+}
+
+.track-name {
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+    display: block;
+}
+
+.track-artist {
+    color: #b3b3b3;
+    font-size: 0.9em;
+    display: block;
+}
+
+.comparison-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1ED760;
+    font-size: 2rem;
+    padding: 0 1rem;
+}
+
+/* Custom scrollbar for playlist tracks */
+.playlist-tracks::-webkit-scrollbar {
+    width: 8px;
+}
+
+.playlist-tracks::-webkit-scrollbar-track {
+    background: #181818;
+    border-radius: 4px;
+}
+
+.playlist-tracks::-webkit-scrollbar-thumb {
+    background: #1ED760;
+    border-radius: 4px;
+}
+
+.playlist-tracks::-webkit-scrollbar-thumb:hover {
+    background: #17a743;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .comparison-container {
+        flex-direction: column;
+    }
+    
+    .comparison-arrow {
+        transform: rotate(90deg);
+        padding: 1rem 0;
+    }
+    
+    .playlist-box {
+        min-width: unset;
+    }
+}
+
+.features-summary {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #282828;
+    border-radius: 8px;
+}
+
+.features-summary h3 {
+    color: #1ED760;
+    margin-bottom: 1.5rem;
+}
+
+.features-comparison-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.features-table-container {
+    flex: 1;
+    background: #181818;
+    padding: 1.5rem;
+    border-radius: 8px;
+    min-width: 300px;
+}
+
+.features-table-container h4 {
+    color: #1ED760;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #333;
+}
+
+.comparison-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1ED760;
+    font-size: 2rem;
+    padding: 0 1rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .features-comparison-container {
+        flex-direction: column;
+    }
+    
+    .comparison-arrow {
+        transform: rotate(90deg);
+        padding: 1rem 0;
+    }
+}
+
+.features-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #ffffff;
+}
+
+.features-table th,
+.features-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #333;
+}
+
+.features-table th {
+    color: #1ED760;
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+    background: #181818;
+}
+
+.features-table tr:hover {
+    background: #282828;
+}
+
+.features-table td:last-child {
+    font-family: monospace;
+    color: #1ED760;
+}
+
+/* Custom scrollbar for features table */
+.features-table-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.features-table-container::-webkit-scrollbar-track {
+    background: #181818;
+    border-radius: 4px;
+}
+
+.features-table-container::-webkit-scrollbar-thumb {
+    background: #1ED760;
+    border-radius: 4px;
+}
+
+.features-table-container::-webkit-scrollbar-thumb:hover {
+    background: #17a743;
+}
+
+@media (max-width: 768px) {
+    .features-table-container {
+        min-width: unset;
+    }
+}
