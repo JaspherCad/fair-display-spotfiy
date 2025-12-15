@@ -6,11 +6,11 @@ A personalized music recommendation engine that analyzes your Spotify listening 
 
 **Full Demo + Backend Explained (2.5 min):**  
 Watch how the recommendation system works under the hood  
-https://www.youtube.com/watch?v=R4kFx7N2gXg
+# https://www.youtube.com/watch?v=R4kFx7N2gXg
 
 **Quick Demo (1 min):**  
 See the app in action without the technical details  
-https://www.youtube.com/watch?v=E_4ve8gynhI
+# https://www.youtube.com/watch?v=E_4ve8gynhI
 
 ## What It Does
 
